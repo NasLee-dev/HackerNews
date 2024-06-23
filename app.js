@@ -18,24 +18,26 @@ window.addEventListener('hashchange', function() {
   const id = location.hash.substr(1);
 
   const newsContents = getData(CONTENT_URL.replace('@id', id));
-  const title = this.document.createElement('h1');
 
-  title.innerHTML = newsContents.title;
-  content.appendChild(title);
+  contaqiner.innerHTML = `
+    <h1>${newsContents.title}</h1>
+    <div>
+      <a href="#">목록으로</a>
+    </div>
+  `;
 });
+const newsList = [];
+newsList.push('<ul>');
 
 for (let i = 0; i < newsFeed.length; i++) {
-  const div = document.createElement('div');
-
-  div.innerHTML = `
+  newsList.push(`
     <li>
       <a href="#${newsFeed[i].id}">
         ${newsFeed[i].title} (${newsFeed[i].comments_count})
       </a>
     </li>
-  `
-  ul.appendChild(div.firstElementChild)
+  `);
 }
+newsList.push('</ul>');
 
-container.appendChild(ul);
-container.appendChild(content);
+container.innerHTML = newsList.join('');
