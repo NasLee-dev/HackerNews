@@ -8,5 +8,6 @@
     "noImplicitThis": true,
     "sourceMap": true,
     "downlevelIteration": true
-  }
+  },
+  "include": ["app.ts"]
 }
