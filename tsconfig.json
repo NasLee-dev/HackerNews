@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "ES5",
+    "target": "ES6",
     "module": "CommonJS",
     "alwaysStrict": true,
     "noImplicitAny": true,
@@ -9,5 +9,5 @@
     "sourceMap": true,
     "downlevelIteration": true
   },
-  "include": ["app.ts"]
+  "include": ["src/app.ts"]
 }
