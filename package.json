@@ -1,5 +1,9 @@
 {
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
   "devDependencies": {
-    "typescript": "^5.5.2"
+    "parcel": "^2.0.0"
   }
 }

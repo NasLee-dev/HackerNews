@@ -1,37 +1,58 @@
-import { RouteInfo } from "../types";
-import View from "./view";
+import { RouteInfo } from '../types';
+import View from './view';
 
-export default class Router { 
-  routeTable: RouteInfo[];
+export default class Router {
+  private isStart: boolean;
   defaultRoute: RouteInfo | null;
+  routeTable: RouteInfo[];
 
   constructor() {
     window.addEventListener('hashchange', this.route.bind(this));
-
-    this.routeTable = [];
+    
+    this.isStart = false;
     this.defaultRoute = null;
-  }
-  
-  setDefaultPage(page: View): void {
-    this.defaultRoute = { path: '', page };
+    this.routeTable = [];
   }
 
-  addRoutePath(path: string, page: View): void {
-    this.routeTable.push({ path, page });
+  setDefaultPage(page: View, params: RegExp | null = null): void {
+    this.defaultRoute = {
+      path: '', 
+      page, 
+      params,
+    };
   }
 
-  route() {
-    const routePath = location.hash;
+  addRoutePath(path: string, page: View, params: RegExp | null = null): void {
+    this.routeTable.push({ path, page, params });
 
+    if (!this.isStart) {
+      this.isStart = true;
+      // Execute next tick
+      setTimeout(this.route.bind(this), 0);
+    }
+  }
+
+  private route() {
+    const routePath: string = location.hash;
+    
     if (routePath === '' && this.defaultRoute) {
       this.defaultRoute.page.render();
+      return;
     }
 
-    for (const routeInfo of this.routeTable) {
-      if (routePath.indexOf(routeInfo.path) >= 0) {
-        routeInfo.page.render();
-        break;
-      }
+    for(const routeInfo of this.routeTable) {
+      if (routePath.indexOf(routeInfo.path) >= 0) {        
+        if (routeInfo.params) {
+          const parseParams = routePath.match(routeInfo.params);
+
+          if (parseParams) {
+            routeInfo.page.render.apply(null, [parseParams[1]]);
+          }          
+        } else {
+          routeInfo.page.render();
+        }       
+        return;
+      }  
     }
   }
 }
